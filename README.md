@@ -13,12 +13,10 @@ A simple Android application that uses the [CheapShark API](https://apidocs.chea
 ## Screenshots
 
 #### Game List & Game Detail - Light Mode
-<img src="screenshots/game_list_light.png" width="300"/>
-<img src="screenshots/game_detail_light.png" width="300"/>
+<img src="screenshots/game_list_light.png" width="300"/>   <img src="screenshots/game_detail_light.png" width="300"/>
 
 #### Game List & Game Detail - Dark Mode
-<img src="screenshots/game_list_dark.png" width="300"/>
-<img src="screenshots/game_detail_dark.png" width="300"/>
+<img src="screenshots/game_list_dark.png" width="300"/>    <img src="screenshots/game_detail_dark.png" width="300"/>
 
 ## Tech Stack
 
