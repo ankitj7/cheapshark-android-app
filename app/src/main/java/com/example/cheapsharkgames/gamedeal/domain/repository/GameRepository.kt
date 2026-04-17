@@ -12,9 +12,10 @@ interface GameRepository {
     /**
      * Fetches a list of current game deals.
      *
+     * @param page The page number to fetch.
      * @return A [Result] containing a list of [GameInfo] objects on success, or an exception on failure.
      */
-    suspend fun getGames(): Result<List<GameInfo>>
+    suspend fun getGames(page: Int): Result<List<GameInfo>>
 
     /**
      * Fetches detailed information for a specific game.

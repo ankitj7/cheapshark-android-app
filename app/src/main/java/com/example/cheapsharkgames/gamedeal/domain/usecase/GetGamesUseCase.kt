@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 /**
- * Use case to fetch a list of game deals.
+ * Use case to fetch a list of game deals with pagination support.
  *
  * @property repository The [GameRepository] to fetch data from.
  */
@@ -19,11 +19,12 @@ class GetGamesUseCase @Inject constructor(
     /**
      * Executes the use case.
      *
+     * @param page The page number to fetch.
      * @return A [Flow] emitting a [Result] containing a list of [GameInfo].
      */
-    operator fun invoke(): Flow<Result<List<GameInfo>>> {
+    operator fun invoke(page: Int): Flow<Result<List<GameInfo>>> {
         return flow {
-            val games = repository.getGames()
+            val games = repository.getGames(page)
             emit(games)
         }.flowOn(Dispatchers.IO)
     }

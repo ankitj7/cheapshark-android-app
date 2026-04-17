@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * ViewModel for the Game List screen, following the MVI pattern.
+ * ViewModel for the Game List screen, following the MVI pattern and supporting pagination.
  *
  * @property getGamesUseCase Use case to fetch the list of games.
  */
@@ -37,6 +37,8 @@ class GameListViewModel @Inject constructor(
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
     val navigationEvent: SharedFlow<NavigationEvent> = _navigationEvent.asSharedFlow()
 
+    private var currentPage = 0
+
     init {
         onIntent(GameListIntent.LoadGames)
     }
@@ -48,7 +50,17 @@ class GameListViewModel @Inject constructor(
      */
     fun onIntent(intent: GameListIntent) {
         when (intent) {
-            is GameListIntent.LoadGames -> getGames()
+            is GameListIntent.LoadGames -> {
+                currentPage = 0
+                _state.value = GameListState() // Reset state
+                getGames()
+            }
+            is GameListIntent.LoadNextPage -> {
+                if (!_state.value.isLoading && !_state.value.isNextPageLoading && !_state.value.endOfPagination) {
+                    currentPage++
+                    getGames()
+                }
+            }
             is GameListIntent.GameClicked -> {
                 viewModelScope.launch {
                     _navigationEvent.emit(NavigationEvent.NavigateToDetail(intent.gameId))
@@ -58,22 +70,31 @@ class GameListViewModel @Inject constructor(
     }
 
     private fun getGames() {
-        getGamesUseCase()
+        val isFirstPage = currentPage == 0
+        getGamesUseCase(currentPage)
             .onStart {
-                _state.value = _state.value.copy(isLoading = true, error = null)
+                if (isFirstPage) {
+                    _state.value = _state.value.copy(isLoading = true, error = null)
+                } else {
+                    _state.value = _state.value.copy(isNextPageLoading = true)
+                }
             }
             .onEach { result ->
                 result.fold(
-                    onSuccess = { games ->
+                    onSuccess = { newGames ->
+                        val currentGames = _state.value.games
                         _state.value = _state.value.copy(
-                            games = games,
-                            isLoading = false
+                            games = if (isFirstPage) newGames else (currentGames + newGames).distinctBy { it.id },
+                            isLoading = false,
+                            isNextPageLoading = false,
+                            endOfPagination = newGames.isEmpty()
                         )
                     },
                     onFailure = { exception ->
                         _state.value = _state.value.copy(
                             error = exception.localizedMessage,
-                            isLoading = false
+                            isLoading = false,
+                            isNextPageLoading = false
                         )
                     }
                 )

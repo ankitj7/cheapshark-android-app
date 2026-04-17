@@ -10,6 +10,11 @@ sealed class GameListIntent {
     object LoadGames : GameListIntent()
 
     /**
+     * Intent to load the next page of games for pagination.
+     */
+    object LoadNextPage : GameListIntent()
+
+    /**
      * Intent triggered when a game item is clicked.
      * 
      * @property gameId The ID of the clicked game.

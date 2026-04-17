@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,8 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -36,7 +41,7 @@ import com.example.cheapsharkgames.ui.theme.CheapSharkGamesTheme
 import com.example.cheapsharkgames.ui.theme.Dimensions
 
 /**
- * Screen that displays a list of game deals using the MVI pattern.
+ * Screen that displays a list of game deals using the MVI pattern and pagination.
  *
  * @param viewModel The [GameListViewModel] that provides the screen state and handles intents.
  */
@@ -45,6 +50,21 @@ fun GameListScreen(
     viewModel: GameListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+
+    // Detect when to load the next page
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem != null && lastVisibleItem.index >= state.games.size - 5
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore && !state.endOfPagination && !state.isNextPageLoading) {
+            viewModel.onIntent(GameListIntent.LoadNextPage)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -69,7 +89,10 @@ fun GameListScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize()
+            ) {
                 items(state.games) { game ->
                     GameItem(
                         game = game,
@@ -77,6 +100,22 @@ fun GameListScreen(
                             viewModel.onIntent(GameListIntent.GameClicked(game.id))
                         }
                     )
+                }
+
+                if (state.isNextPageLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Dimensions.PaddingMedium),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.height(Dimensions.ProgressRowHeight),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 }
             }
 

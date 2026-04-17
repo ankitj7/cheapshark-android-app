@@ -45,4 +45,6 @@ object Dimensions {
      * Standard border stroke width.
      */
     val BorderThin = 1.dp
+
+    val ProgressRowHeight = 24.dp
 }

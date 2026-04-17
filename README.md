@@ -28,6 +28,7 @@ A simple Android application that uses the [CheapShark API](https://apidocs.chea
 - **Coil**: Image loading.
 - **Navigation Compose**: For app navigation.
 - **Coroutines & Flow**: For asynchronous programming and reactive data streams.
+- **Unit Tests**: Includes unit tests for the ViewModels using MockK, Turbine, and Google Truth.
 
 ## Project Structure
 
@@ -41,7 +42,7 @@ A simple Android application that uses the [CheapShark API](https://apidocs.chea
 
 - **Game List Source**: The `/deals` API is used to populate the initial game list. This was chosen over the `/games` API because it requires a title query, while `/deals` provides a rich list of games.
 - **Data De-duplication**: The Deals API often returns multiple deals for the same game. The `GameRepositoryImpl` uses `distinctBy { it.gameID }` to ensure the user sees a unique list of games rather than redundant entries.
-- **Pagination support**: There is an opportunity to implement pagination for the Deals API to improve scalability when displaying games. Due to time constraints, this was not implemented but can be added.
+- **Pagination support**: Implemented pagination for the Deals API to improve scalability when displaying games.
 - **Edge case handling (Deals API)**: In certain scenarios, applying a uniqueness filter on the initial page may result in very few games being displayed. This case is not currently handled but can be addressed with additional logic.
 - **Screenshots**: App screenshots are added in `/screenshots` folder for your reference
 
@@ -50,3 +51,11 @@ A simple Android application that uses the [CheapShark API](https://apidocs.chea
 1. Clone the repository.
 2. Open the project in Android Studio (Ladybug or newer recommended).
 3. Build and run the app on an emulator or physical device.
+
+## Testing
+
+To run the unit tests:
+1. Right-click on the `test` directory in the `app` module.
+2. Select **Run 'Tests in...'**.
+
+Currently, unit tests are provided for the `GameDetailViewModel`.

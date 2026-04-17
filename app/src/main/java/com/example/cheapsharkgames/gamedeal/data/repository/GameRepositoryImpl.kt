@@ -15,12 +15,12 @@ class GameRepositoryImpl @Inject constructor(
     private val api: CheapSharkApi
 ) : GameRepository {
 
-    override suspend fun getGames(): Result<List<GameInfo>> {
+    override suspend fun getGames(page: Int): Result<List<GameInfo>> {
         return try {
-            // TODO CheapShark - add pagination support
-            // Using deals for now as there is no suitable games endpoint currently, and distinct by gameID to remove
-            // duplicates
-            val games = api.getDeals().distinctBy { it.gameID }.map { it.toGameInfoDomain() }
+            // Fetch deals for the specific page
+            val games = api.getDeals(
+                pageNumber = page,
+            ).distinctBy { it.gameID }.map { it.toGameInfoDomain() }
             Result.success(games)
         } catch (e: Exception) {
             // TODO CheapShark - handle specific exceptions and API errors
