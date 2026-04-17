@@ -6,11 +6,12 @@ import com.example.cheapsharkgames.gamedeal.data.remote.CheapSharkApi
 import com.example.cheapsharkgames.gamedeal.domain.model.GameInfo
 import com.example.cheapsharkgames.gamedeal.domain.model.GameDetail
 import com.example.cheapsharkgames.gamedeal.domain.repository.GameRepository
+import javax.inject.Inject
 
 /**
  * Implementation of [GameRepository] that fetches data from the CheapShark API.
  */
-class GameRepositoryImpl(
+class GameRepositoryImpl @Inject constructor(
     private val api: CheapSharkApi
 ) : GameRepository {
 
