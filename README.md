@@ -4,7 +4,7 @@ A simple Android application that uses the [CheapShark API](https://apidocs.chea
 
 ## Features
 
-- **Game List**: Displays a list of current game deals including thumbnails and names.
+- **Game List**: Displays a list of games including thumbnails and names.
 - **Game Details**: Show additional information about a specific game, including the cheapest price ever and all currently available deals across different stores.
 - **Clean Architecture**: Organized into data, domain, and presentation layers for better maintainability and testability.
 - **MVI Pattern**: Uses the Model-View-Intent pattern for predictable state management in the presentation layer.
@@ -12,10 +12,13 @@ A simple Android application that uses the [CheapShark API](https://apidocs.chea
 
 ## Screenshots
 
-![Game List - Light Mode](screenshots/game_list_light.png)
-![Game Detail - Light Mode](screenshots/game_detail_light.png)
-![Game List - Dark Mode](screenshots/game_list_dark.png)
-![Game Detail - Dark Mode](screenshots/game_detail_dark.png)
+#### Game List & Game Detail - Light Mode
+<img src="screenshots/game_list_light.png" width="300"/>
+<img src="screenshots/game_detail_light.png" width="300"/>
+
+#### Game List & Game Detail - Dark Mode
+<img src="screenshots/game_list_dark.png" width="300"/>
+<img src="screenshots/game_detail_dark.png" width="300"/>
 
 ## Tech Stack
 
