@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CheapSharkGames</string>
+    <string name="game_list_title">Games</string>
 </resources>
