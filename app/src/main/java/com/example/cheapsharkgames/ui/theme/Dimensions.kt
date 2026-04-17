@@ -21,8 +21,6 @@ object Dimensions {
      */
     val PaddingXSmall = 4.dp
 
-    val PaddingTiny = 2.dp
-
     /**
      * Standard size for game thumbnail images in lists.
      */
