@@ -2,14 +2,19 @@ package com.example.cheapsharkgames.gamedeal.presentation.gamelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cheapsharkgames.core.util.NavigationEvent
 import com.example.cheapsharkgames.gamedeal.domain.usecase.GetGamesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -29,6 +34,9 @@ class GameListViewModel @Inject constructor(
      */
     val state: StateFlow<GameListState> = _state.asStateFlow()
 
+    private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
+    val navigationEvent: SharedFlow<NavigationEvent> = _navigationEvent.asSharedFlow()
+
     init {
         onIntent(GameListIntent.LoadGames)
     }
@@ -42,7 +50,9 @@ class GameListViewModel @Inject constructor(
         when (intent) {
             is GameListIntent.LoadGames -> getGames()
             is GameListIntent.GameClicked -> {
-                // TODO CheapShark - Navigation to detail screen will go here later
+                viewModelScope.launch {
+                    _navigationEvent.emit(NavigationEvent.NavigateToDetail(intent.gameId))
+                }
             }
         }
     }
@@ -62,7 +72,7 @@ class GameListViewModel @Inject constructor(
                     },
                     onFailure = { exception ->
                         _state.value = _state.value.copy(
-                            error = exception.localizedMessage ?: "An unexpected error occurred",
+                            error = exception.localizedMessage,
                             isLoading = false
                         )
                     }

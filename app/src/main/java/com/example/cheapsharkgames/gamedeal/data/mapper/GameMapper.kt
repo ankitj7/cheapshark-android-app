@@ -57,5 +57,5 @@ fun DealSummaryDto.toDomain() = GameDeal(
     dealId = dealID,
     price = price,
     retailPrice = retailPrice,
-    savings = "${savings.toDouble().toInt()}%"
+    savings = savings.toDoubleOrNull() ?: 0.0,
 )

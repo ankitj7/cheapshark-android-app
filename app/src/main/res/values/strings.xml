@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">CheapSharkGames</string>
     <string name="game_list_title">Games</string>
+    <string name="back">Back</string>
+    <string name="deals_header">Deals</string>
+    <string name="cheapest_ever">Cheapest Ever: %s</string>
+    <string name="store_label">Store: %s</string>
+    <string name="error_unexpected">An unexpected error occurred</string>
 </resources>

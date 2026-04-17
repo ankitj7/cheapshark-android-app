@@ -31,12 +31,12 @@ data class CheapestPrice(
  * @property dealId The unique ID of the specific deal.
  * @property price The current price of the game at this store.
  * @property retailPrice The standard retail price at this store.
- * @property savings The percentage savings for this specific deal.
+ * @property savings The numeric savings value (e.g., 80.0).
  */
 data class GameDeal(
     val storeId: String,
     val dealId: String,
     val price: String,
     val retailPrice: String,
-    val savings: String
+    val savings: Double
 )
